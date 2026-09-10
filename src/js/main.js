@@ -27,6 +27,9 @@ const emojis = [
   "🐝",
 ];
 
+let firstChoice = null;
+let secondChoice = null;
+
 function shuffleArray(array) {
   for (var i = array.length - 1; i > 0; i--) {
     var j = Math.floor(Math.random() * (i + 1));
@@ -34,23 +37,27 @@ function shuffleArray(array) {
     array[i] = array[j];
     array[j] = temp;
   }
+  return array;
 }
 
 shuffleArray(emojis);
 
 emojis.forEach((emoji) => {
-  const card = document.createElement("div");
-  card.classList.add("card");
-  card.dataset.emoji = emoji;
+  const cardElement = document.createElement("div");
+  cardElement.classList.add("card");
+  cardElement.dataset.emoji = emoji;
 
-  card.addEventListener("click", () => {
-    card.classList.add("flipped");
+  cardElement.addEventListener("click", () => {
+    if (firstChoice === null) {
+      cardElement.classList.add("flipped");
+      firstChoice = cardElement;
+    } else if (secondChoice === null) {
+      cardElement.classList.add("flipped");
+      secondChoice = cardElement;
+    } else {
+      // on ne fait rien
+    }
   });
 
-  board.appendChild(card);
+  board.appendChild(cardElement);
 });
-
-/** 1. retourne les cartes (rendre l'emoji invisible)
- * -la carte de base ne doit pas afficher l'emoji
- * quand on clic sur la carte, l'emoji doit s'afficher
- */
