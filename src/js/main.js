@@ -29,6 +29,9 @@ let firstChoice = null;
 let secondChoice = null;
 let isShowingAllCards = false;
 
+// Количество пар, которые нужно найти в игре.
+let matchedPairs = cardsImages.length / 2;
+
 // -----------------------------------------------------------------------------
 // 4. Функция перемешивания массива карт
 // -----------------------------------------------------------------------------
@@ -49,19 +52,19 @@ shuffleArray(cardsImages);
 // 5. Создаём DOM-элементы для каждой карты и вешаем обработчики клика
 // -----------------------------------------------------------------------------
 cardsImages.forEach((imageUrl) => {
-  const CardElement = document.createElement("button");
-  CardElement.classList.add("card-button");
-  CardElement.type = "button";
-  CardElement.dataset.image = imageUrl;
+  const cardElement = document.createElement("button");
+  cardElement.classList.add("card-button");
+  cardElement.type = "button";
+  cardElement.dataset.image = imageUrl;
 
   const image = document.createElement("img");
   image.classList.add("card-image");
   image.src = imageUrl;
   image.alt = "";
 
-  CardElement.append(image);
+  cardElement.append(image);
 
-  CardElement.addEventListener("click", () => {
+  cardElement.addEventListener("click", () => {
     // Если все карты уже показаны, ничего не делаем
     if (isShowingAllCards) {
       return;
@@ -69,17 +72,25 @@ cardsImages.forEach((imageUrl) => {
 
     // Первая карта: открываем её и сохраняем выбор
     if (firstChoice === null) {
-      CardElement.classList.add("flipped");
-      firstChoice = CardElement;
+      cardElement.classList.add("flipped");
+      firstChoice = cardElement;
     }
     // Вторая карта: открываем её и сохраняем второй выбор
     else if (secondChoice === null) {
-      CardElement.classList.add("flipped");
-      secondChoice = CardElement;
-
+      cardElement.classList.add("flipped");
+      secondChoice = cardElement;
+      // Если обе карты уже выбраны, проверяем совпадение.
       if (firstChoice.dataset.image === secondChoice.dataset.image) {
+        // Совпавшие карты оставляем открытыми и очищаем выбранные карты.
         firstChoice = null;
         secondChoice = null;
+        matchedPairs = matchedPairs - 1; // Уменьшаем количество пар, которые еще осталось найти.
+        // Если все пары найдены, выводим сообщение о победе.
+        if (matchedPairs === 0) {
+          setTimeout(() => {
+            window.alert("Congratulations! You've matched all pairs!");
+          }, 1000);
+        }
       } else {
         setTimeout(() => {
           firstChoice.classList.remove("flipped");
@@ -91,17 +102,17 @@ cardsImages.forEach((imageUrl) => {
     }
     // Если уже выбраны две карты, ждём следующего хода
     else {
-      // Ничего не делаем: игра ждёт, пока пользователь обработает выбор.
+      console.log("Please wait until the cards are flipped back.");
     }
   });
 
-  board.appendChild(CardElement);
+  board.appendChild(cardElement);
 });
 
 // -----------------------------------------------------------------------------
 // 6. Получаем список всех карточек после их создания
 // -----------------------------------------------------------------------------
-const cards = document.querySelectorAll(".card");
+const cards = document.querySelectorAll(".card-button");
 
 // -----------------------------------------------------------------------------
 // 7. Кнопка "Показать карты": открывает все карты на несколько секунд
@@ -118,5 +129,6 @@ revealButton.addEventListener("click", () => {
   setTimeout(() => {
     cards.forEach((card) => card.classList.remove("flipped"));
     isShowingAllCards = false;
-  }, 2000);
+    revealButton.disabled = false;
+  }, 700);
 });
