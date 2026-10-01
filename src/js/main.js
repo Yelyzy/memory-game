@@ -7,31 +7,19 @@ const revealButton = document.querySelector("#reveal-button");
 // -----------------------------------------------------------------------------
 // 2. Создание массива карточек с парами эмодзи
 // -----------------------------------------------------------------------------
-const emojis = [
-  "💍",
-  "🐚",
-  "❄️",
-  "🦀",
-  "🪼",
-  "🥥",
-  "🐤",
-  "🍄",
-  "🦋",
-  "🌵",
-  "🌸",
-  "🐝",
-  "💍",
-  "🐚",
-  "❄️",
-  "🦀",
-  "🪼",
-  "🥥",
-  "🐤",
-  "🍄",
-  "🦋",
-  "🌵",
-  "🌸",
-  "🐝",
+const cardsImages = [
+  new URL("../image/image-1.jpg", import.meta.url).href,
+  new URL("../image/image-2.jpg", import.meta.url).href,
+  new URL("../image/image-3.jpg", import.meta.url).href,
+  new URL("../image/image-4.jpg", import.meta.url).href,
+  new URL("../image/image-5.jpg", import.meta.url).href,
+  new URL("../image/image-6.jpg", import.meta.url).href,
+  new URL("../image/image-1.jpg", import.meta.url).href,
+  new URL("../image/image-2.jpg", import.meta.url).href,
+  new URL("../image/image-3.jpg", import.meta.url).href,
+  new URL("../image/image-4.jpg", import.meta.url).href,
+  new URL("../image/image-5.jpg", import.meta.url).href,
+  new URL("../image/image-6.jpg", import.meta.url).href,
 ];
 
 // -----------------------------------------------------------------------------
@@ -55,17 +43,25 @@ function shuffleArray(array) {
 }
 
 // Перемешиваем набор карт перед отрисовкой поля
-shuffleArray(emojis);
+shuffleArray(cardsImages);
 
 // -----------------------------------------------------------------------------
 // 5. Создаём DOM-элементы для каждой карты и вешаем обработчики клика
 // -----------------------------------------------------------------------------
-emojis.forEach((emoji) => {
-  const cardElement = document.createElement("div");
-  cardElement.classList.add("card");
-  cardElement.dataset.emoji = emoji;
+cardsImages.forEach((imageUrl) => {
+  const CardElement = document.createElement("button");
+  CardElement.classList.add("card-button");
+  CardElement.type = "button";
+  CardElement.dataset.image = imageUrl;
 
-  cardElement.addEventListener("click", () => {
+  const image = document.createElement("img");
+  image.classList.add("card-image");
+  image.src = imageUrl;
+  image.alt = "";
+
+  CardElement.append(image);
+
+  CardElement.addEventListener("click", () => {
     // Если все карты уже показаны, ничего не делаем
     if (isShowingAllCards) {
       return;
@@ -73,13 +69,25 @@ emojis.forEach((emoji) => {
 
     // Первая карта: открываем её и сохраняем выбор
     if (firstChoice === null) {
-      cardElement.classList.add("flipped");
-      firstChoice = cardElement;
+      CardElement.classList.add("flipped");
+      firstChoice = CardElement;
     }
     // Вторая карта: открываем её и сохраняем второй выбор
     else if (secondChoice === null) {
-      cardElement.classList.add("flipped");
-      secondChoice = cardElement;
+      CardElement.classList.add("flipped");
+      secondChoice = CardElement;
+
+      if (firstChoice.dataset.image === secondChoice.dataset.image) {
+        firstChoice = null;
+        secondChoice = null;
+      } else {
+        setTimeout(() => {
+          firstChoice.classList.remove("flipped");
+          secondChoice.classList.remove("flipped");
+          firstChoice = null;
+          secondChoice = null;
+        }, 1000);
+      }
     }
     // Если уже выбраны две карты, ждём следующего хода
     else {
@@ -87,7 +95,7 @@ emojis.forEach((emoji) => {
     }
   });
 
-  board.appendChild(cardElement);
+  board.appendChild(CardElement);
 });
 
 // -----------------------------------------------------------------------------

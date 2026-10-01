@@ -21,12 +21,11 @@
 // Игровое поле: сетка с карточками и рамкой контейнера
 // -----------------------------------------------------------------------------
 #board {
-  width: 800px;
-  height: 550px;
+  width: 70vw;
   margin: 0 auto;
   display: grid;
   grid-template-columns: repeat(6, 1fr);
-  grid-template-rows: repeat(4, 1fr);
+  grid-template-rows: repeat(2, 1fr);
   gap: 10px;
   padding: 10px;
   border-radius: 16px;
@@ -58,7 +57,7 @@
 }
 
 .card-button {
-  width: 15vw;
+  width: 150зч;
   padding: 0;
   border: 0;
   border-radius: 10px;
@@ -85,6 +84,6 @@
   transition: transform 600ms ease;
 }
 
-.card-button:active::before {
+.card-button.flipped::before {
   transform: rotateY(180deg);
 }
