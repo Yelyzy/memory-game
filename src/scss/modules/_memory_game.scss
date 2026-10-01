@@ -3,18 +3,27 @@
 // -----------------------------------------------------------------------------
 #reveal-button {
   display: block;
-  margin: 0 auto 16px;
-  padding: 10px 18px;
+  margin: 0 auto 20px;
+  padding: 12px 24px;
   border: 0;
-  border-radius: 8px;
-  background-color: #006461;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #9c82ef 0%, #bda5f0 100%);
   color: #fff;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
   cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    opacity 0.2s ease;
 }
 
 #reveal-button:disabled {
   cursor: wait;
-  opacity: 0.6;
+  opacity: 0.7;
+  box-shadow: none;
 }
 
 // -----------------------------------------------------------------------------
